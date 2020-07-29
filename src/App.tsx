@@ -2,7 +2,7 @@ import React from 'react';
 import GlobalStyles from './components/styles/GlobalStyles';
 import Game from './components/Game';
 
-const App = () => (
+const App: React.FC = () => (
   <>
     <GlobalStyles />
     <Game />

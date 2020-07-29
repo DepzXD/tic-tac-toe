@@ -1,13 +1,54 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const SquareStyle = styled.div`
+const SquareStyle = styled.div<{ current: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100px;
   height: 100px;
-  border: 4px solid black;
+  border: 4px solid #092532;
+  border-radius: 7%;
   cursor: pointer;
+
+  ${(props) =>
+    props.current === 'X' &&
+    css`
+      &:before,
+      &:after {
+        position: absolute;
+        content: '';
+        width: 10px;
+        height: 80px;
+        background: #24a19c;
+      }
+      &:before {
+        transform: rotate(45deg);
+      }
+      &:after {
+        transform: rotate(-45deg);
+      }
+    `}
+
+  ${(props) =>
+    props.current === 'O' &&
+    css`
+      &:before,
+      &:after {
+        position: absolute;
+        content: '';
+        border-radius: 50%;
+      }
+      &:before {
+        width: 80px;
+        height: 80px;
+        background: #393e46;
+      }
+      &:after {
+        width: 60px;
+        height: 60px;
+        background: #b7efcd;
+      }
+    `}
 
   &:first-child,
   &:nth-child(2),
@@ -27,39 +68,6 @@ const SquareStyle = styled.div`
 
   &:nth-child(3n + 3) {
     border-right: none;
-  }
-
-  &.x:before,
-  &.x:after {
-    position: absolute;
-    content: '';
-    width: 10px;
-    height: 80px;
-
-    background: #000;
-  }
-  &.x:before {
-    transform: rotate(45deg);
-  }
-  &.x:after {
-    transform: rotate(-45deg);
-  }
-
-  &.o:before,
-  &.o:after {
-    position: absolute;
-    content: '';
-    border-radius: 50%;
-  }
-  &.o:before {
-    width: 90px;
-    height: 90px;
-    background: #000;
-  }
-  &.o:after {
-    width: 70px;
-    height: 70px;
-    background: #fff;
   }
 `;
 

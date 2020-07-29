@@ -16,6 +16,7 @@ const GlobalStyles = createGlobalStyle`
     margin: 0;
     font-size: 2rem;
     line-height: 2;
+    background: #b7efcd;
   }
   div {
     margin: 0;

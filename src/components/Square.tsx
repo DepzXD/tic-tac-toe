@@ -1,9 +1,13 @@
 import React from 'react';
 import SquareStyle from './styles/SquareStyle';
+// import { Props } from './Board';
 
-const Square = () => {
+const Square: React.FC<{ val: number; currentState: any[] }> = ({
+  val,
+  currentState,
+}) => {
   return (
-    <SquareStyle>
+    <SquareStyle current={currentState[val]}>
       <div>{}</div>
     </SquareStyle>
   );
