@@ -30,5 +30,8 @@
     "tslint-config-prettier": "^1.18.0",
     "tslint-react": "^5.0.0",
     "typescript": "^3.9.7"
-  }
+  },
+  "browserslist": [
+    "last 2 Chrome versions"
+  ]
 }

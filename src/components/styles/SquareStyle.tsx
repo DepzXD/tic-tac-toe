@@ -4,9 +4,9 @@ const SquareStyle = styled.div<{ current: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100px;
-  height: 100px;
-  border: 4px solid #092532;
+  width: 150px;
+  height: 150px;
+  border: 7px solid #092532;
   border-radius: 7%;
   cursor: pointer;
 
@@ -17,8 +17,8 @@ const SquareStyle = styled.div<{ current: string }>`
       &:after {
         position: absolute;
         content: '';
-        width: 10px;
-        height: 80px;
+        width: 15px;
+        height: 120px;
         background: #24a19c;
       }
       &:before {
@@ -39,13 +39,13 @@ const SquareStyle = styled.div<{ current: string }>`
         border-radius: 50%;
       }
       &:before {
-        width: 80px;
-        height: 80px;
+        width: 120px;
+        height: 120px;
         background: #393e46;
       }
       &:after {
-        width: 60px;
-        height: 60px;
+        width: 90px;
+        height: 90px;
         background: #b7efcd;
       }
     `}

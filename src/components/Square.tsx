@@ -1,13 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import SquareStyle from './styles/SquareStyle';
-// import { Props } from './Board';
+import GameStateContext from '../GameStateContext';
+import { Props } from './Board';
 
-const Square: React.FC<{ val: number; currentState: any[] }> = ({
-  val,
-  currentState,
-}) => {
+interface Square extends Props {
+  val: number;
+}
+
+const Square: React.FC<Square> = ({ val, player, makeMove }) => {
+  const [currentState, setCurrentState] = useContext(GameStateContext);
+  // const makeMove = () => {
+  //   let temp = currentState;
+  //   temp[val] = player;
+  //   setCurrentState(temp);
+  //   console.log(currentState);
+  // };
+
   return (
-    <SquareStyle current={currentState[val]}>
+    <SquareStyle current={currentState[val]} onClick={() => makeMove(val)}>
       <div>{}</div>
     </SquareStyle>
   );
