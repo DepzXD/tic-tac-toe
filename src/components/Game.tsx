@@ -40,12 +40,14 @@ const Game: React.FC = () => {
   useEffect(() => {
     const isWinner: boolean = checkWinner(currentState);
     if (isWinner) {
-      setWinner(isWinner);
-      console.log(`yay!! ${playerX ? 'X' : 'O'} is Winner`);
+      setWinner(true);
       setShowModal(true);
+      console.log(`yay!! ${playerX ? 'X' : 'O'} is Winner`);
+      return;
     }
     if (!currentState.includes('')) {
       setShowModal(true);
+      return;
     }
 
     SetNextPlayer(playerX ? 'O' : 'X');
@@ -53,7 +55,8 @@ const Game: React.FC = () => {
   }, [currentState, setCurrentState]);
 
   function resetState(): void {
-    setPlayerX(true);
+    setPlayerX(false);
+    SetNextPlayer('X');
     setCurrentState(Array(9).fill(''));
     setWinner(false);
   }
