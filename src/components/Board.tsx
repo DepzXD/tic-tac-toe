@@ -4,19 +4,20 @@ import BoardStyles from './styles/BoardStyles';
 
 export interface Props {
   makeMove: (index: number) => void;
+  nextPlayer: string;
 }
-const Board: React.FC<Props> = ({ makeMove }) => {
+const Board: React.FC<Props> = ({ makeMove, nextPlayer }) => {
   return (
     <BoardStyles>
-      <Square index={0} makeMove={makeMove} />
-      <Square index={1} makeMove={makeMove} />
-      <Square index={2} makeMove={makeMove} />
-      <Square index={3} makeMove={makeMove} />
-      <Square index={4} makeMove={makeMove} />
-      <Square index={5} makeMove={makeMove} />
-      <Square index={6} makeMove={makeMove} />
-      <Square index={7} makeMove={makeMove} />
-      <Square index={8} makeMove={makeMove} />
+      <Square index={0} makeMove={makeMove} nextPlayer={nextPlayer} />
+      <Square index={1} makeMove={makeMove} nextPlayer={nextPlayer} />
+      <Square index={2} makeMove={makeMove} nextPlayer={nextPlayer} />
+      <Square index={3} makeMove={makeMove} nextPlayer={nextPlayer} />
+      <Square index={4} makeMove={makeMove} nextPlayer={nextPlayer} />
+      <Square index={5} makeMove={makeMove} nextPlayer={nextPlayer} />
+      <Square index={6} makeMove={makeMove} nextPlayer={nextPlayer} />
+      <Square index={7} makeMove={makeMove} nextPlayer={nextPlayer} />
+      <Square index={8} makeMove={makeMove} nextPlayer={nextPlayer} />
     </BoardStyles>
   );
 };

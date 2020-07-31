@@ -34,7 +34,8 @@ const Game: React.FC = () => {
   const [playerX, setPlayerX] = useState<boolean>(false);
   const [currentState, setCurrentState] = useState(Array(9).fill(''));
   const [winner, setWinner] = useState<boolean>(false);
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [nextPlayer, SetNextPlayer] = useState<string>('X');
 
   useEffect(() => {
     const isWinner: boolean = checkWinner(currentState);
@@ -46,6 +47,8 @@ const Game: React.FC = () => {
     if (!currentState.includes('')) {
       setShowModal(true);
     }
+
+    SetNextPlayer(playerX ? 'O' : 'X');
     setPlayerX(!playerX);
   }, [currentState, setCurrentState]);
 
@@ -94,7 +97,7 @@ const Game: React.FC = () => {
           </ModalStyles>
         </Modal>
       ) : null}
-      <Board makeMove={MakeMove} />
+      <Board makeMove={MakeMove} nextPlayer={nextPlayer} />
     </GameStateContext.Provider>
   );
 };
