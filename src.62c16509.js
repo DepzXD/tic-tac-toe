@@ -31585,7 +31585,129 @@ const react_1 = require("react");
 
 const GameStateContext = react_1.createContext([['', '', '', '', '', '', '', '', ''], () => {}]);
 exports.default = GameStateContext;
-},{"react":"../node_modules/react/index.js"}],"../src/components/styles/SquareStyle.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js"}],"../src/components/Modal.tsx":[function(require,module,exports) {
+"use strict";
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function () {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+const react_1 = __importStar(require("react"));
+
+const react_dom_1 = require("react-dom");
+
+const modalRoot = document.getElementById('modal');
+
+const Modal = ({
+  children
+}) => {
+  const elRef = react_1.useRef(document.createElement('div'));
+  react_1.useEffect(() => {
+    if (!modalRoot) {
+      return;
+    }
+
+    modalRoot.appendChild(elRef.current);
+    return () => {
+      modalRoot.removeChild(elRef.current);
+    };
+  }, []);
+  return react_dom_1.createPortal(react_1.default.createElement("div", null, children), elRef.current);
+};
+
+exports.default = Modal;
+},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js"}],"../src/components/styles/ModalStyles.tsx":[function(require,module,exports) {
+"use strict";
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+const styled_components_1 = __importDefault(require("styled-components"));
+
+const ModalStyles = styled_components_1.default.div`
+  position: absolute;
+  display: flex;
+  width: 200vh;
+  height: 100vh;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  justify-items: center;
+  background: rgba(0, 15, 26, 0.15);
+  z-index: 100;
+  div {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.45);
+    border-radius: 10px;
+    display: flex;
+    flex-flow: column;
+    padding: 3rem;
+    background: #fff;
+    justify-content: center;
+    align-items: center;
+    h1 {
+      font-size: 4rem;
+      line-height: 1.2;
+      color: #092532;
+      margin: 0;
+      margin-bottom: 2rem;
+    }
+    h2 {
+      margin: 0;
+    }
+    button {
+      color: #092532;
+      background: none;
+      border-radius: 10px;
+      border: 4px solid #092532;
+      width: 50%;
+      padding: 0.6rem;
+      font-size: 2rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  }
+`;
+exports.default = ModalStyles;
+},{"styled-components":"../node_modules/styled-components/dist/styled-components.browser.esm.js"}],"../src/components/styles/SquareStyle.tsx":[function(require,module,exports) {
 "use strict";
 
 var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
@@ -31883,19 +32005,42 @@ const react_1 = __importStar(require("react"));
 
 const GameStateContext_1 = __importDefault(require("../GameStateContext"));
 
+const Modal_1 = __importDefault(require("./Modal"));
+
+const ModalStyles_1 = __importDefault(require("./styles/ModalStyles"));
+
 const Board_1 = __importDefault(require("./Board"));
+
+const checkWinner = currentState => {
+  const rows = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+
+  for (let i = 0; i < rows.length; i++) {
+    const [a, b, c] = rows[i];
+
+    if (currentState[a] && currentState[a] === currentState[b] && currentState[b] === currentState[c]) {
+      return true;
+    }
+  }
+
+  return false;
+};
 
 const Game = () => {
   const [playerX, setPlayerX] = react_1.useState(false);
   const [currentState, setCurrentState] = react_1.useState(Array(9).fill(''));
   const [winner, setWinner] = react_1.useState(false);
+  const [showModal, setShowModal] = react_1.useState(false);
   react_1.useEffect(() => {
-    const who = checkWinner(currentState);
+    const isWinner = checkWinner(currentState);
 
-    if (who) {
-      setWinner(who);
+    if (isWinner) {
+      setWinner(isWinner);
       console.log(`yay!! ${playerX ? 'X' : 'O'} is Winner`);
-      resetState();
+      setShowModal(true);
+    }
+
+    if (!currentState.includes('')) {
+      setShowModal(true);
     }
 
     setPlayerX(!playerX);
@@ -31919,27 +32064,18 @@ const Game = () => {
 
   return react_1.default.createElement(GameStateContext_1.default.Provider, {
     value: [currentState, setCurrentState]
-  }, react_1.default.createElement(Board_1.default, {
+  }, showModal ? react_1.default.createElement(Modal_1.default, null, react_1.default.createElement(ModalStyles_1.default, null, react_1.default.createElement("div", null, !winner ? react_1.default.createElement(react_1.default.Fragment, null, react_1.default.createElement("h2", null, "\uD83D\uDE1B"), react_1.default.createElement("h1", null, "LOL!! Try Again.")) : react_1.default.createElement(react_1.default.Fragment, null, react_1.default.createElement("h2", null, "\uD83D\uDE09\uD83D\uDC4C"), react_1.default.createElement("h1", null, "Woo!! ", playerX ? 'X' : 'O', " is a Winner.")), react_1.default.createElement("button", {
+    onClick: () => {
+      resetState();
+      setShowModal(false);
+    }
+  }, "Restart")))) : null, react_1.default.createElement(Board_1.default, {
     makeMove: MakeMove
   }));
 };
 
-const checkWinner = currentState => {
-  const rows = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
-
-  for (let i = 0; i < rows.length; i++) {
-    const [a, b, c] = rows[i];
-
-    if (currentState[a] && currentState[a] === currentState[b] && currentState[b] === currentState[c]) {
-      return true;
-    }
-  }
-
-  return false;
-};
-
 exports.default = Game;
-},{"react":"../node_modules/react/index.js","../GameStateContext":"../src/GameStateContext.tsx","./Board":"../src/components/Board.tsx"}],"../src/App.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","../GameStateContext":"../src/GameStateContext.tsx","./Modal":"../src/components/Modal.tsx","./styles/ModalStyles":"../src/components/styles/ModalStyles.tsx","./Board":"../src/components/Board.tsx"}],"../src/App.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importDefault = this && this.__importDefault || function (mod) {
@@ -32009,7 +32145,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51088" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53272" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
