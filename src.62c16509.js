@@ -31794,6 +31794,48 @@ const SquareStyle = styled_components_1.default.div`
       }
     `}
 
+      ${({
+  nextPlayer,
+  current
+}) => nextPlayer === 'X' && current === '' ? styled_components_1.css`
+              &:hover:before,
+              &:hover:after {
+                position: absolute;
+                content: '';
+                width: 15px;
+                height: 120px;
+                background: rgba(36, 161, 156, 0.57);
+              }
+              &:hover:before {
+                transform: rotate(45deg);
+              }
+              &:hover:after {
+                transform: rotate(-45deg);
+              }
+            ` : null}
+
+  ${({
+  nextPlayer,
+  current
+}) => nextPlayer === 'O' && current === '' ? styled_components_1.css`
+          &:hover:before,
+          &:hover:after {
+            position: absolute;
+            content: '';
+            border-radius: 50%;
+          }
+          &:hover:before {
+            width: 120px;
+            height: 120px;
+            background: rgba(57, 62, 70, 0.57);
+          }
+          &:hover:after {
+            width: 90px;
+            height: 90px;
+            background: #b7efcd;
+          }
+        ` : null}
+
   &:first-child,
   &:nth-child(2),
   &:nth-child(3) {
@@ -31868,11 +31910,13 @@ const GameStateContext_1 = __importDefault(require("../GameStateContext"));
 
 const Square = ({
   index,
-  makeMove
+  makeMove,
+  nextPlayer
 }) => {
   const [currentState] = react_1.useContext(GameStateContext_1.default);
   return react_1.default.createElement(SquareStyle_1.default, {
     current: currentState[index],
+    nextPlayer: nextPlayer,
     onClick: () => makeMove(index)
   }, react_1.default.createElement("div", null));
 };
@@ -31923,35 +31967,45 @@ const Square_1 = __importDefault(require("./Square"));
 const BoardStyles_1 = __importDefault(require("./styles/BoardStyles"));
 
 const Board = ({
-  makeMove
+  makeMove,
+  nextPlayer
 }) => {
   return react_1.default.createElement(BoardStyles_1.default, null, react_1.default.createElement(Square_1.default, {
     index: 0,
-    makeMove: makeMove
+    makeMove: makeMove,
+    nextPlayer: nextPlayer
   }), react_1.default.createElement(Square_1.default, {
     index: 1,
-    makeMove: makeMove
+    makeMove: makeMove,
+    nextPlayer: nextPlayer
   }), react_1.default.createElement(Square_1.default, {
     index: 2,
-    makeMove: makeMove
+    makeMove: makeMove,
+    nextPlayer: nextPlayer
   }), react_1.default.createElement(Square_1.default, {
     index: 3,
-    makeMove: makeMove
+    makeMove: makeMove,
+    nextPlayer: nextPlayer
   }), react_1.default.createElement(Square_1.default, {
     index: 4,
-    makeMove: makeMove
+    makeMove: makeMove,
+    nextPlayer: nextPlayer
   }), react_1.default.createElement(Square_1.default, {
     index: 5,
-    makeMove: makeMove
+    makeMove: makeMove,
+    nextPlayer: nextPlayer
   }), react_1.default.createElement(Square_1.default, {
     index: 6,
-    makeMove: makeMove
+    makeMove: makeMove,
+    nextPlayer: nextPlayer
   }), react_1.default.createElement(Square_1.default, {
     index: 7,
-    makeMove: makeMove
+    makeMove: makeMove,
+    nextPlayer: nextPlayer
   }), react_1.default.createElement(Square_1.default, {
     index: 8,
-    makeMove: makeMove
+    makeMove: makeMove,
+    nextPlayer: nextPlayer
   }));
 };
 
@@ -32030,6 +32084,7 @@ const Game = () => {
   const [currentState, setCurrentState] = react_1.useState(Array(9).fill(''));
   const [winner, setWinner] = react_1.useState(false);
   const [showModal, setShowModal] = react_1.useState(false);
+  const [nextPlayer, SetNextPlayer] = react_1.useState('X');
   react_1.useEffect(() => {
     const isWinner = checkWinner(currentState);
 
@@ -32043,6 +32098,7 @@ const Game = () => {
       setShowModal(true);
     }
 
+    SetNextPlayer(playerX ? 'O' : 'X');
     setPlayerX(!playerX);
   }, [currentState, setCurrentState]);
 
@@ -32070,7 +32126,8 @@ const Game = () => {
       setShowModal(false);
     }
   }, "Restart")))) : null, react_1.default.createElement(Board_1.default, {
-    makeMove: MakeMove
+    makeMove: MakeMove,
+    nextPlayer: nextPlayer
   }));
 };
 
