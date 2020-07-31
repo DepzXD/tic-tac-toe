@@ -32089,13 +32089,15 @@ const Game = () => {
     const isWinner = checkWinner(currentState);
 
     if (isWinner) {
-      setWinner(isWinner);
-      console.log(`yay!! ${playerX ? 'X' : 'O'} is Winner`);
+      setWinner(true);
       setShowModal(true);
+      console.log(`yay!! ${playerX ? 'X' : 'O'} is Winner`);
+      return;
     }
 
     if (!currentState.includes('')) {
       setShowModal(true);
+      return;
     }
 
     SetNextPlayer(playerX ? 'O' : 'X');
@@ -32103,7 +32105,8 @@ const Game = () => {
   }, [currentState, setCurrentState]);
 
   function resetState() {
-    setPlayerX(true);
+    setPlayerX(false);
+    SetNextPlayer('X');
     setCurrentState(Array(9).fill(''));
     setWinner(false);
   }
@@ -32202,7 +32205,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53272" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54148" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
