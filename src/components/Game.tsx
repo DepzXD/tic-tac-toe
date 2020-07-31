@@ -1,42 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import GameStateContext from '../GameStateContext';
+import Modal from './Modal';
+import ModalStyles from './styles/ModalStyles';
 import Board from './Board';
 
-const Game: React.FC = () => {
-  const [playerX, setPlayerX] = useState<boolean>(false);
-  const [currentState, setCurrentState] = useState(Array(9).fill(''));
-  const [winner, setWinner] = useState<boolean>(false);
-
-  useEffect(() => {
-    const who: boolean = checkWinner(currentState);
-    if (who) {
-      setWinner(who);
-      console.log(`yay!! ${playerX ? 'X' : 'O'} is Winner`);
-      resetState();
-    }
-    setPlayerX(!playerX);
-  }, [currentState, setCurrentState]);
-
-  function resetState(): void {
-    setPlayerX(true);
-    setCurrentState(Array(9).fill(''));
-    setWinner(false);
-  }
-  function MakeMove(index: number): void {
-    if (currentState[index] !== '') {
-      return;
-    }
-    const newState: string[] = [...currentState];
-    newState[index] = playerX ? 'X' : 'O';
-    setCurrentState(newState);
-  }
-
-  return (
-    <GameStateContext.Provider value={[currentState, setCurrentState]}>
-      <Board makeMove={MakeMove} />
-    </GameStateContext.Provider>
-  );
-};
 const checkWinner = (currentState: string[]): boolean => {
   const rows = [
     [0, 1, 2],
@@ -61,6 +28,75 @@ const checkWinner = (currentState: string[]): boolean => {
   }
 
   return false;
+};
+
+const Game: React.FC = () => {
+  const [playerX, setPlayerX] = useState<boolean>(false);
+  const [currentState, setCurrentState] = useState(Array(9).fill(''));
+  const [winner, setWinner] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    const isWinner: boolean = checkWinner(currentState);
+    if (isWinner) {
+      setWinner(isWinner);
+      console.log(`yay!! ${playerX ? 'X' : 'O'} is Winner`);
+      setShowModal(true);
+    }
+    if (!currentState.includes('')) {
+      setShowModal(true);
+    }
+    setPlayerX(!playerX);
+  }, [currentState, setCurrentState]);
+
+  function resetState(): void {
+    setPlayerX(true);
+    setCurrentState(Array(9).fill(''));
+    setWinner(false);
+  }
+
+  function MakeMove(index: number): void {
+    if (currentState[index] !== '') {
+      return;
+    }
+
+    const newState: string[] = [...currentState];
+    newState[index] = playerX ? 'X' : 'O';
+    setCurrentState(newState);
+  }
+
+  return (
+    <GameStateContext.Provider value={[currentState, setCurrentState]}>
+      {showModal ? (
+        <Modal>
+          <ModalStyles>
+            <div>
+              {!winner ? (
+                <>
+                  <h2>😛</h2>
+                  <h1>LOL!! Try Again.</h1>
+                </>
+              ) : (
+                <>
+                  <h2>😉👌</h2>
+                  <h1>Woo!! {playerX ? 'X' : 'O'} is a Winner.</h1>
+                </>
+              )}
+              <button
+                onClick={() => {
+                  resetState();
+                  setShowModal(false);
+                }}
+              >
+                Restart
+              </button>
+            </div>
+          </ModalStyles>
+        </Modal>
+      ) : null}
+      <Board makeMove={MakeMove} />
+    </GameStateContext.Provider>
+  );
 };
 
 export default Game;
